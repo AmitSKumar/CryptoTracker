@@ -53,23 +53,29 @@ export class CoinDetailComponent implements OnInit {
       this.coinId = val['id'];
     });
     this.getCoinData();
-    this.getGraphData();
+    this.getGraphData(this.days);
     this.currencyService.getCurrency().subscribe(val=>{
       this.currency=val
       this.getCoinData();
-      this.getGraphData();
+      this.getGraphData(this.days);
     })
   }
   getCoinData() {
     console.log(this.coinId);
     this.api.getCurrencyById(this.coinId).subscribe((data) => {
       console.log(data);
+      if(this.currency==="USD"){
+        data.market_data.current_price.inr=data.market_data.current_price.usd;
+        data.market_data.market_cap.inr=data.market_data.market_cap.usd
+      }
+      data.market_data.current_price.inr=data.market_data.current_price.inr;
+      data.market_data.market_cap.inr=data.market_data.market_cap.inr
       this.coinData = data;
     });
   }
-  getGraphData() {
+  getGraphData(days:number) {
     this.api
-      .getGrpahicalCurrencyData(this.coinId, this.currency, 30)
+      .getGrpahicalCurrencyData(this.coinId, this.currency, days)
       .subscribe((gdata) => {
         setTimeout(()=>{
           this.mylineChart.chart?.update();
@@ -83,7 +89,7 @@ export class CoinDetailComponent implements OnInit {
             date.getHours() > 12
               ? `${date.getHours() - 12}:${date.getMinutes()} PM`
               : `${date.getHours()}:${date.getMinutes()} AM`;
-          return this.days === 1 ? time : date.toLocaleDateString();
+          return days === 1 ? time : date.toLocaleDateString();
         });
       });
   }

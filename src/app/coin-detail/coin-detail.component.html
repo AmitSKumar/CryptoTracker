@@ -18,5 +18,11 @@
             [options]="lineChartOptions"
             [type]="lineChartType">
           </canvas>
+          <div class="d-flex">
+            <button (click)=getGraphData(1) class="btn btn-custom">1 Days</button>
+            <button (click)=getGraphData(30) class="btn btn-custom">30 Days</button>
+            <button (click)=getGraphData(90) class="btn btn-custom"> 90 Days</button>
+            <button (click)=getGraphData(360) class="btn btn-custom">1 year</button>
+          </div>
         </div>
 </div>
